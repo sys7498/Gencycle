@@ -1,0 +1,12 @@
+#temp {
+    width: 100%;
+    height: 64px;
+    position: relative;
+    color: white;
+}
+
+#three-container {
+    width: 100%;
+    height: calc(100% - 64px);
+    position: relative;
+}

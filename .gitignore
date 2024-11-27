@@ -3,6 +3,10 @@ web/node_modules
 *.pt
 *.obj
 *.mtl
+python/assets/*
+python/callibration/*
+python/output/*
+python/checkpoints/*
 
 .vscode/*
 !.vscode/settings.json

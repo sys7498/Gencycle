@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initThreeJS();
+    this.initThreeJS(); //3
     this.animate();
   }
 

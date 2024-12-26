@@ -1,0 +1,32 @@
+<div
+    class="window-container"
+    (mousemove)="onMouseMove($event)"
+    (mouseleave)="onMouseLeave()"
+    #windowContainer>
+
+    <div class="title" *ngIf="title != ''">
+        <ng-container *ngIf="check">
+            <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M17.5 0C7.84 0 0 7.84 0 17.5C0 27.16 7.84 35 17.5 35C27.16 35 35 27.16 35 17.5C35 7.84 27.16 0 17.5 0ZM17.5 31.5C9.7825 31.5 3.5 25.2175 3.5 17.5C3.5 9.7825 9.7825 3.5 17.5 3.5C25.2175 3.5 31.5 9.7825 31.5 17.5C31.5 25.2175 25.2175 31.5 17.5 31.5ZM25.5325 9.765L14 21.2975L9.4675 16.7825L7 19.25L14 26.25L28 12.25L25.5325 9.765Z"
+                    fill="#21D83C" />
+            </svg>
+        </ng-container>
+
+        <div style="margin-right:10px;"></div>
+        {{title}}
+    </div>
+
+    <!-- 동적으로 삽입될 내용 -->
+    <div class="window-content">
+        <ng-content></ng-content>
+    </div>
+    <!-- 하이라이트 효과 -->
+    <div class="light-highlight"></div>
+    <div class="window-footer">
+        <button class="button secondary-button" *ngIf="cancelButtonLabel != ''" (click)="onClickCancel()">{{
+            cancelButtonLabel }}</button>
+        <button class="button primary-button" *ngIf="confirmButtonLabel != ''" (click)="onClickConfirm()">{{
+            confirmButtonLabel }}</button>
+    </div>
+</div>

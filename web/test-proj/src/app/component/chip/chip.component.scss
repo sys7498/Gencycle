@@ -1,0 +1,61 @@
+/* Chip 컨테이너 */
+.container {
+    max-width: 550px;
+    overflow-x: auto;
+    /* Chip 사이의 간격 */
+}
+
+.chip-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 550px;
+    overflow-x: auto;
+    margin: 5px 0 20px 0;
+    /* Chip 사이의 간격 */
+}
+
+/* 기본 Chip 스타일 */
+.chip {
+    padding: 5px 12px;
+    border-radius: 16px;
+    background-color: transparent;
+    color: #c8c8c8;
+    border-color: #c8c8c8;
+    border-width: 1px;
+    border-style: solid;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Hover 효과 */
+.chip:hover {
+    background-color: #c8c8c8;
+    color: black;
+}
+
+/* 선택된 상태 */
+.chip.selected {
+    background-color: #c8c8c8;
+    border-color: #c8c8c8;
+    color: black;
+}
+
+/* 비활성화 상태 */
+.chip.disabled {
+    background-color: #c8c8c8;
+    border-color: #c8c8c8;
+    color: #000000;
+    cursor: not-allowed;
+    pointer-events: none;
+    /* 클릭 이벤트 비활성화 */
+}
+
+.title {
+    height: 28px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-weight: medium;
+}

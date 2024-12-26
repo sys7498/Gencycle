@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="title" *ngIf="title != ''">
+        {{title}}:
+    </div>
+    <div class="chip-container">
+        <div
+            class="chip"
+            *ngFor="let item of items"
+            [class.selected]="isSelected(item)"
+            [class.disabled]="!isSelectable"
+            (click)="toggleSelection(item)">
+            {{ item }}
+        </div>
+    </div>
+
+</div>

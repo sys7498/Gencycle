@@ -1,0 +1,15 @@
+<div class="slider-container">
+    <!-- 이전 화살표 -->
+    <button class="arrow left" (click)="prevImage()">&#10094;</button>
+
+    <!-- 이미지 컨테이너 -->
+    <div class="image-wrapper">
+        <img [src]="images[currentIndex]" alt="slider-image" class="slider-image" />
+        <!-- Blur 효과와 텍스트 -->
+        <div class="image-overlay"></div>
+        <div class="text-overlay">{{ text }}</div>
+    </div>
+
+    <!-- 다음 화살표 -->
+    <button class="arrow right" (click)="nextImage()">&#10095;</button>
+</div>

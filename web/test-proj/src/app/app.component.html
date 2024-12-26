@@ -1,8 +1,190 @@
-<div id="temp">
-  <button (click)="getBoundingBox()">GETBOUNDINGBOX</button>
-  <button (click)="getDetectionResult()">Detect Image</button>
-</div>
 <div id="main">
-  <div id="three-container" #threeContainer></div>
-  <div id="ui"></div>
+  <div class="fake-cursor" [ngStyle]="cursorStyle"></div>
+  <div id="three-container" #threeContainer>
+    <div id="fabric-container" #fabricContainer *ngIf="isShowFabric">
+      <div id="fabric-canvas">
+        <canvas #fabricCanvas></canvas>
+      </div>
+    </div>
+  </div>
+  <div id="ui">
+    <ng-container *ngIf="nowStep==step.Start">
+      <app-select-window
+        [check]="false"
+        title="Ai Love Upcycling"
+        confirmButtonLabel="Get Started Now"
+        (onClickConfirmButton)="onClickConfirmButton(step.Detect, wait.Wait)">
+        <div #qrCanvas></div>
+      </app-select-window>
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.Detect">
+      <ng-container *ngIf="nowWait == wait.Wait">
+        <app-loading [message]="'Detecting'"></app-loading>
+      </ng-container>
+      <ng-container *ngIf="nowWait == wait.Done">
+        <app-select-window
+          confirmButtonLabel="Complete"
+          cancelButtonLabel="Retry"
+          title="Object Detected"
+          (onClickCancelButton)="onClickCancelButton(step.Detect, wait.Wait)"
+          (onClickConfirmButton)="onClickConfirmButton(step.GenerateImage, wait.Ready)">
+          <div class="customized-window">
+            <app-chip [items]="chipItems" [isSelectable]="false"></app-chip>
+          </div>
+        </app-select-window>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.GenerateImage">
+      <ng-container *ngIf="nowWait == wait.Ready">
+        <app-select-window
+          [check]="false"
+          confirmButtonLabel="Generate"
+          title="Generate Upcycling Object"
+          (onClickConfirmButton)="onClickConfirmButton(step.GenerateImage, wait.Wait)">
+          <div class="customized-window">
+            <app-chip [items]="chipItems" [isSelectable]="false"></app-chip>
+            <div style="color: #80C27B; font-weight: bold;">Keywords</div>
+            <app-chip title="Product Types" [items]="chipItemsProductType" [isSelectable]="true"
+              (selectionChange)="onChangeChipSelection($event, 'productType')"></app-chip>
+            <app-chip title="Target user" [items]="chipItemsTargetUsers" [isSelectable]="true"
+              (selectionChange)="onChangeChipSelection($event, 'targetUser')"></app-chip>
+            <div>
+              <div>
+                Your Prompt
+              </div>
+              <div class="prompt">
+                {{prompt}}
+              </div>
+            </div>
+          </div>
+        </app-select-window>
+      </ng-container>
+      <ng-container *ngIf="nowWait == wait.Wait">
+        <app-loading [message]="'Generating Image'"></app-loading>
+      </ng-container>
+      <ng-container *ngIf="nowWait == wait.Done">
+        <app-select-window
+          confirmButtonLabel="Next"
+          cancelButtonLabel="Edit"
+          title="Image Created"
+          (onClickCancelButton)="onClickCancelButton(step.EditImage, wait.Ready)"
+          (onClickConfirmButton)="onClickConfirmButton(step.GenerateMesh, wait.Wait)">
+        </app-select-window>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="nowStep == step.EditImage">
+      <ng-container *ngIf="nowWait == wait.Ready">
+        <app-select-window
+          confirmButtonLabel="Pass"
+          cancelButtonLabel="Edit(Generate)"
+          title="Edit Image"
+          (onClickCancelButton)="onClickCancelButton(step.EditImage, wait.Wait)"
+          (onClickConfirmButton)="onClickConfirmButton(step.GenerateMesh, wait.Wait)">
+          <div>
+            <div>
+              <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M7.98622 14.0625C8.63707 14.0625 9.261 13.9795 9.85801 13.8135C10.455 13.6475 11.0178 13.4131 11.5463 13.1104C12.0748 12.8076 12.5495 12.4414 12.9703 12.0117C13.3912 11.582 13.7582 11.106 14.0714 10.5835C14.3846 10.061 14.6219 9.50195 14.7834 8.90625C14.9449 8.31055 15.0281 7.68555 15.033 7.03125C15.033 6.38184 14.9498 5.75928 14.7834 5.16357C14.617 4.56787 14.3821 4.00635 14.0787 3.479C13.7753 2.95166 13.4083 2.47803 12.9777 2.05811C12.547 1.63818 12.0699 1.27197 11.5463 0.959473C11.0227 0.646973 10.4624 0.410156 9.86535 0.249023C9.26834 0.0878906 8.64196 0.00488281 7.98622 0C7.33538 0 6.71145 0.0830078 6.11443 0.249023C5.51742 0.415039 4.95466 0.649414 4.42615 0.952148C3.89765 1.25488 3.42297 1.62109 3.00212 2.05078C2.58128 2.48047 2.21426 2.95654 1.90107 3.479C1.58788 4.00146 1.35054 4.56055 1.18906 5.15625C1.02757 5.75195 0.944378 6.37695 0.939484 7.03125C0.939484 7.68066 1.02267 8.30322 1.18906 8.89892C1.35544 9.49463 1.59033 10.0562 1.89373 10.5835C2.19713 11.1108 2.56415 11.5845 2.99478 12.0044C3.42542 12.4243 3.90254 12.7905 4.42615 13.103C4.94976 13.4155 5.51008 13.6523 6.10709 13.8135C6.70411 13.9746 7.33048 14.0576 7.98622 14.0625ZM7.98622 0.9375C8.54898 0.9375 9.08972 1.01074 9.60844 1.15723C10.1272 1.30371 10.6116 1.50879 11.0618 1.77246C11.512 2.03613 11.9255 2.35352 12.3023 2.72461C12.6792 3.0957 12.9972 3.50586 13.2566 3.95508C13.516 4.4043 13.7215 4.89014 13.8732 5.4126C14.0249 5.93506 14.0983 6.47461 14.0934 7.03125C14.0934 7.58789 14.02 8.125 13.8732 8.64258C13.7264 9.16016 13.5208 9.646 13.2566 10.1001C12.9923 10.5542 12.6743 10.9668 12.3023 11.3379C11.9304 11.709 11.5194 12.0264 11.0692 12.29C10.619 12.5537 10.1321 12.7588 9.60844 12.9053C9.08483 13.0518 8.54409 13.125 7.98622 13.125C7.42835 13.125 6.89006 13.0518 6.37134 12.9053C5.85263 12.7588 5.36572 12.5537 4.91061 12.29C4.45551 12.0264 4.04201 11.709 3.67009 11.3379C3.29818 10.9668 2.9801 10.5566 2.71585 10.1074C2.4516 9.6582 2.24607 9.17236 2.09926 8.6499C1.95245 8.12744 1.87905 7.58789 1.87905 7.03125C1.87905 6.47461 1.95245 5.9375 2.09926 5.41992C2.24607 4.90234 2.4516 4.4165 2.71585 3.9624C2.9801 3.5083 3.29818 3.0957 3.67009 2.72461C4.04201 2.35352 4.45307 2.03613 4.90327 1.77246C5.35348 1.50879 5.84039 1.30371 6.364 1.15723C6.88762 1.01074 7.42835 0.9375 7.98622 0.9375ZM8.456 5.625H7.51644V10.3125H8.456V5.625ZM8.456 3.75H7.51644V4.6875H8.456V3.75Z"
+                  fill="#B6B6B6" />
+              </svg>
+              Draw the area you want to edit
+            </div>
+            <div style="margin-top:10px;">
+              Your Prompt
+            </div>
+            <textarea class="edit-prompt" [value]="editPrompt"></textarea>
+          </div>
+        </app-select-window>
+      </ng-container>
+      <ng-container *ngIf="nowWait == wait.Wait">
+        <app-loading [message]="'Generating Image'"></app-loading>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.GenerateMesh">
+      <ng-container *ngIf="nowWait == wait.Wait">
+        <app-loading [message]="'Generating Mesh'"></app-loading>
+      </ng-container>
+      <ng-container *ngIf="nowWait == wait.Done">
+        <app-select-window
+          confirmButtonLabel="Generate Instruction Paper"
+          title="Upcycling Object Generated"
+          (onClickConfirmButton)="onClickConfirmButton(step.GenerateInstructionPaper, wait.Wait)">
+        </app-select-window>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.GenerateInstructionPaper">
+      <ng-container *ngIf="nowWait == wait.Wait">
+        <app-loading [message]="'Generating Instruction Paper'"></app-loading>
+      </ng-container>
+      <ng-container *ngIf="nowWait == wait.Done">
+        <app-select-window
+          title="Instruction Generated">
+          <div class="instruction" [innerHTML]="instruction">
+          </div>
+        </app-select-window>
+      </ng-container>
+    </ng-container>
+  </div>
 </div>
+
+<!--
+
+<ng-container *ngIf="nowStep==step.Start">
+    <app-loading [message]="'Detecting'"></app-loading>
+    <app-select-window>
+      <div style="text-align: center;">
+        <h2>Design Options Generated</h2>
+        <p>Please choose to proceed or go back to edit.</p>
+      </div>
+    </app-select-window>
+    <app-images [images]="demoImages"></app-images>
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.Detect">
+      <ng-container *ngIf="nowWait == wait.Wait">
+        <app-loading [message]="'Detecting'"></app-loading>
+      </ng-container>
+      <ng-container *ngIf="nowWait == wait.Done">
+
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.Confirm">
+
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.GenerateImage">
+
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.EditImage">
+
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.GenerateMesh">
+
+    </ng-container>
+    <ng-container *ngIf="nowStep==step.GenerateInstructionPaper">
+
+    </ng-container>
+
+    <div id="three-container" #threeContainer>
+      <div *ngIf="isLoading" class="loading-screen">
+        <div class="spinner">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div id="fabric-container" #fabricContainer *ngIf="isShowFabric">
+        <div id="fabric-canvas">
+          <canvas #fabricCanvas></canvas>
+        </div>
+      </div>
+    </div>
+    <div id="ui" [class.disabled]="isLoading">
+      <input class="hologram-text" type="text" [(ngModel)]=prompt placeholder="input your prompt here" />
+      <button (click)="getGenImage()" class="hologram-button">Generate Image</button>
+      <button (click)="editGenImage()" class="hologram-button">Edit Generated Image</button>
+      <button (click)="getGenMesh()" class="hologram-button">Generate Mesh</button>
+      <button (click)="getPc()" class="hologram-button">Generate Point Cloud</button>
+      <button (click)="getBoundingBox()" class="hologram-button">Get Bounding Box</button>
+      <button (click)="getTestObjModel()" class="hologram-button">Get Test Obj Model</button>
+      <button (click)="getDetectionResult()" class="hologram-button">Get Detection Result</button>
+    </div>
+    -->

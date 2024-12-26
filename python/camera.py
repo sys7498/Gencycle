@@ -1,5 +1,5 @@
 import cv2
-
+import torch
 def capture_photo():
     a = 0
     # 카메라 열기 (0은 기본 카메라)
@@ -36,4 +36,6 @@ def capture_photo():
     cv2.destroyAllWindows()
 
 # 사진 촬영 함수 호출
-capture_photo()
+#capture_photo()
+
+print(torch.cuda.is_available())

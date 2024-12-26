@@ -1,9 +1,11 @@
 {
   "dependencies": {
-    "@angular/cli": "^18.2.11",
+    "@angular/cli": "^18.2.12",
     "@types/three": "^0.169.0",
     "axios": "^1.7.7",
+    "marked": "^15.0.4",
     "ngx-socket-io": "^4.7.0",
+    "qrcode": "^1.5.4",
     "socket.io-client": "^4.8.1",
     "three": "^0.170.0"
   },

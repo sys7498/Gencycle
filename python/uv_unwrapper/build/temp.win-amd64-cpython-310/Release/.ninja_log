@@ -1,0 +1,4 @@
+# ninja log v5
+11	602	7555398112853541	C:/Users/yoonseok/Documents/coding/Gencycle/python/uv_unwrapper/build/temp.win-amd64-cpython-310/Release/uv_unwrapper/csrc/intersect.obj	bcce1e906038b433
+6	603	7555398112853541	C:/Users/yoonseok/Documents/coding/Gencycle/python/uv_unwrapper/build/temp.win-amd64-cpython-310/Release/uv_unwrapper/csrc/bvh.obj	72a45a02f9b7e09d
+13	11054	7555398217295492	C:/Users/yoonseok/Documents/coding/Gencycle/python/uv_unwrapper/build/temp.win-amd64-cpython-310/Release/uv_unwrapper/csrc/unwrapper.obj	63c86adf037bf0d8

@@ -466,10 +466,17 @@ def generate_3d_AABB_ani(segmentation, depth, visualization=False):
     
 
 if(__name__ == '__main__'):
-    rgb_path = "assets/logi_example0.jpg"
-    segmentation = generate_mask_COCO(rgb_path, True)
-    depth = generate_depthmap(rgb_path)
+    #rgb_path = "assets/logi_example0.jpg"
+    #segmentation = generate_mask_COCO(rgb_path, True)
+    #depth = generate_depthmap(rgb_path)
     #size = generate_3d_AABB(segmentation, depth, True)
-    generate_3d_AABB_ani(segmentation, depth, True)
+    #generate_3d_AABB_ani(segmentation, depth, True)
+
+    o3d_mesh = o3d.io.read_triangle_mesh("generated_mesh.glb")
+    # 메쉬 단순화 (간소화 비율 0.5로 설정)
+    simplified_mesh = o3d_mesh.simplify_quadric_decimation(face_count=o3d_mesh.triangles.shape[0] // 2)
+
+    # 결과 저장
+    o3d.io.write_triangle_mesh("generated_mesh.glb", simplified_mesh)
 
 

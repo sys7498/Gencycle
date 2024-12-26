@@ -38,7 +38,7 @@ class Gpt:
 
         self.bgremoval_model = bgremoval_model
         self.client = OpenAI(
-            api_key="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",
+            api_key="111",
         )
 
         self.device = torch.device("cpu")
